@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Juego Secciones Cónicas</title>
+<style>
+body{ 
+ text-align:center; 
+ font-family:Arial; 
+ background:linear-gradient(135deg,#0f172a,#1e293b);
+ color:white; 
+}
+
+h1{font-size:32px;}
+
+button{ 
+ padding:12px 20px; 
+ margin:8px; 
+ font-size:18px; 
+ border-radius:12px; 
+ border:none; 
+ cursor:pointer; 
+ background:#38bdf8; 
+ transition:0.3s;
+}
+
+button:hover{
+ transform:scale(1.1);
+ background:#7dd3fc;
+}
+
+canvas{ 
+ margin-top:20px; 
+ box-shadow:0 0 20px rgba(0,0,0,0.5);
+ border-radius:50%;
+}
+
+#pantallaJuego{ display:none; }
+
+#ruletaContainer{ position:relative; display:inline-block; }
+
+#flecha{ 
+ position:absolute; 
+ top:-20px; 
+ left:135px; 
+ font-size:40px; 
+}
+
+#pregunta{ font-size:24px; margin-top:10px; }
+
+#resultado{
+ font-size:22px;
+ margin-top:10px;
+}
+</style>
+</head>
+<body>
+
+<h1 id="inicioTexto">🎮 El juego está a punto de empezar</h1>
+<button onclick="empezar()">Comenzar</button>
+
+<div id="pantallaJuego">
+
+<div id="ruletaContainer">
+<div id="flecha">⬇️</div>
+<canvas id="ruleta" width="300" height="300"></canvas>
+</div>
+
+<br>
+<button onclick="girar()">🎡 Girar Ruleta</button>
+
+<h2 id="categoria"></h2>
+<p id="pregunta"></p>
+
+<button onclick="responder('A')" id="A"></button>
+<button onclick="responder('B')" id="B"></button>
+<button onclick="responder('C')" id="C"></button>
+
+<h3 id="resultado"></h3>
+<h3 id="explicacion"></h3>
+
+</div>
+
+<script>
+let opciones=["Parábola","Hipérbola","Elipse","Circunferencia"];
+
+let preguntas={
+Parábola:[{p:"¿Qué es una parábola?",o:["Curva abierta","Recta","Círculo"],r:"A",e:"Es una curva abierta."}],
+Hipérbola:[{p:"¿Qué es una hipérbola?",o:["Dos ramas abiertas","Recta","Círculo"],r:"A",e:"Tiene dos ramas."}],
+Elipse:[{p:"¿Qué forma tiene?",o:["Óvalo","Recta","Triángulo"],r:"A",e:"Forma ovalada."}],
+Circunferencia:[{p:"¿Qué es?",o:["Curva cerrada","Recta","Parábola"],r:"A",e:"Es cerrada."}]
+};
+
+let canvas=document.getElementById("ruleta");
+let ctx=canvas.getContext("2d");
+
+let anguloActual=0;
+let correcta="";
+let explicacionActual="";
+let audioCtx;
+
+function sonido(freq){
+ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ let osc=audioCtx.createOscillator();
+ let gain=audioCtx.createGain();
+ osc.connect(gain);
+ gain.connect(audioCtx.destination);
+ osc.frequency.value=freq;
+ osc.start();
+ gain.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.2);
+ osc.stop(audioCtx.currentTime+0.2);
+}
+
+function dibujar(){
+ let colores=["#ef4444","#22c55e","#3b82f6","#eab308"];
+ let ang=anguloActual;
+
+ for(let i=0;i<4;i++){
+  let fin=ang+Math.PI/2;
+  ctx.beginPath();
+  ctx.moveTo(150,150);
+  ctx.arc(150,150,150,ang,fin);
+  ctx.fillStyle=colores[i];
+  ctx.fill();
+
+  ctx.save();
+  ctx.translate(150,150);
+  ctx.rotate(ang+Math.PI/4);
+  ctx.fillStyle="black";
+  ctx.font="20px Arial";
+  ctx.textAlign="center";
+  ctx.fillText(opciones[i],90,5);
+  ctx.restore();
+
+  ang=fin;
+ }
+}
+
+dibujar();
+
+function empezar(){
+ document.getElementById("inicioTexto").style.display="none";
+ document.querySelector("button").style.display="none";
+ document.getElementById("pantallaJuego").style.display="block";
+}
+
+function girar(){
+ let vueltas = Math.PI * (6 + Math.random()*2);
+ let inicio=null;
+ let duracion=2500;
+ let anguloInicial=anguloActual;
+ let anguloFinal=anguloActual + vueltas;
+
+ function animar(t){
+  if(!inicio)inicio=t;
+  let progreso=(t-inicio)/duracion;
+  if(progreso>1)progreso=1;
+
+  let ease = 1 - Math.pow(1 - progreso, 3);
+
+  anguloActual = anguloInicial + (anguloFinal - anguloInicial) * ease;
+
+  if(Math.random()<0.1) sonido(400);
+
+  ctx.clearRect(0,0,300,300);
+  dibujar();
+
+  if(progreso<1){
+    requestAnimationFrame(animar);
+  }else{
+    anguloActual = anguloFinal;
+    calcularResultado();
+  }
+ }
+
+ requestAnimationFrame(animar);
+}
+
+function calcularResultado(){
+ let anguloNormal = anguloActual % (2*Math.PI);
+ let anguloFlecha = (3*Math.PI/2 - anguloNormal + 2*Math.PI) % (2*Math.PI);
+ let index = Math.floor(anguloFlecha / (Math.PI/2));
+ let categoria = opciones[index];
+
+ let lista=preguntas[categoria];
+ let q=lista[Math.floor(Math.random()*lista.length)];
+
+ document.getElementById("categoria").innerText="Te tocó: "+categoria;
+ document.getElementById("pregunta").innerText=q.p;
+
+ document.getElementById("A").innerText="A) "+q.o[0];
+ document.getElementById("B").innerText="B) "+q.o[1];
+ document.getElementById("C").innerText="C) "+q.o[2];
+
+ correcta=q.r;
+ explicacionActual=q.e;
+}
+
+function responder(op){
+ if(op===correcta){
+  document.getElementById("resultado").innerText="✅ Correcto";
+  sonido(800);
+ }else{
+  document.getElementById("resultado").innerText="❌ Incorrecto";
+  document.getElementById("explicacion").innerText=explicacionActual;
+  sonido(200);
+ }
+
+ setTimeout(()=>{
+  document.getElementById("resultado").innerText="";
+  document.getElementById("explicacion").innerText="";
+  girar();
+ },2000);
+}
+</script>
+
+</body>
+</html>
