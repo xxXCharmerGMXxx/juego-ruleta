@@ -85,10 +85,46 @@ canvas{
 let opciones=["Parábola","Hipérbola","Elipse","Circunferencia"];
 
 let preguntas={
-Parábola:[{p:"¿Qué es una parábola?",o:["Curva abierta","Recta","Círculo"],r:"A",e:"Es una curva abierta."}],
-Hipérbola:[{p:"¿Qué es una hipérbola?",o:["Dos ramas abiertas","Recta","Círculo"],r:"A",e:"Tiene dos ramas."}],
-Elipse:[{p:"¿Qué forma tiene?",o:["Óvalo","Recta","Triángulo"],r:"A",e:"Forma ovalada."}],
-Circunferencia:[{p:"¿Qué es?",o:["Curva cerrada","Recta","Parábola"],r:"A",e:"Es cerrada."}]
+Parábola:[
+{p:"¿Qué es una parábola?",o:["Curva abierta","Recta","Círculo"],r:"A",e:"Es una curva abierta."},
+{p:"¿Qué elemento tiene?",o:["Foco","Radio","Centro"],r:"A",e:"Tiene foco."},
+{p:"Ecuación básica:",o:["y=ax^2","x+y=0","x^2+y^2"],r:"A",e:"Forma cuadrática."},
+{p:"¿Es simétrica?",o:["Sí","No","A veces"],r:"A",e:"Es simétrica."},
+{p:"¿Se abre hacia dónde?",o:["Arriba/abajo","Solo derecha","No se abre"],r:"A",e:"Depende del signo."},
+{p:"¿Tiene directriz?",o:["Sí","No","A veces"],r:"A",e:"Tiene directriz."},
+{p:"¿Su vértice es?",o:["Punto mínimo/máximo","Centro","Foco"],r:"A",e:"Es el vértice."},
+{p:"¿Es curva cerrada?",o:["No","Sí","A veces"],r:"A",e:"Es abierta."}
+],
+Hipérbola:[
+{p:"¿Qué es una hipérbola?",o:["Dos ramas abiertas","Recta","Círculo"],r:"A",e:"Tiene dos ramas."},
+{p:"Propiedad:",o:["Suma constante","Diferencia constante","Radio"],r:"B",e:"Diferencia constante."},
+{p:"¿Tiene asíntotas?",o:["Sí","No","A veces"],r:"A",e:"Siempre."},
+{p:"Forma:",o:["Abierta","Cerrada","Recta"],r:"A",e:"Es abierta."},
+{p:"¿Tiene focos?",o:["Sí","No","Uno"],r:"A",e:"Dos focos."},
+{p:"¿Interseca ejes?",o:["Sí","No","A veces"],r:"A",e:"Puede hacerlo."},
+{p:"Ecuación típica:",o:["x²/a² - y²/b²","x²+y²","y=ax²"],r:"A",e:"Forma estándar."},
+{p:"¿Es cerrada?",o:["No","Sí","A veces"],r:"A",e:"Es abierta."}
+],
+Elipse:[
+{p:"Forma:",o:["Óvalo","Recta","Triángulo"],r:"A",e:"Es ovalada."},
+{p:"Focos:",o:["Dos","Uno","Ninguno"],r:"A",e:"Tiene dos."},
+{p:"Propiedad:",o:["Suma constante","Diferencia","Radio"],r:"A",e:"Suma constante."},
+{p:"¿Es cerrada?",o:["Sí","No","A veces"],r:"A",e:"Es cerrada."},
+{p:"Se parece a:",o:["Círculo estirado","Recta","Parábola"],r:"A",e:"Es oval."},
+{p:"Ecuación:",o:["x²/a²+y²/b²","x²-y²","y=ax²"],r:"A",e:"Forma estándar."},
+{p:"¿Tiene centro?",o:["Sí","No","A veces"],r:"A",e:"Tiene centro."},
+{p:"¿Tiene ejes?",o:["Mayor y menor","Uno","Ninguno"],r:"A",e:"Dos ejes."}
+],
+Circunferencia:[
+{p:"¿Qué es?",o:["Curva cerrada","Recta","Parábola"],r:"A",e:"Es cerrada."},
+{p:"Puntos:",o:["Igual distancia","Variable","Nada"],r:"A",e:"Igual distancia."},
+{p:"Radio:",o:["Distancia centro","Diámetro","Área"],r:"A",e:"Correcto."},
+{p:"Diámetro:",o:["2 radios","1 radio","Curva"],r:"A",e:"Correcto."},
+{p:"Ecuación:",o:["x²+y²=r²","y=ax²","x+y"],r:"A",e:"Correcta."},
+{p:"¿Tiene centro?",o:["Sí","No","A veces"],r:"A",e:"Tiene centro."},
+{p:"¿Es cerrada?",o:["Sí","No","A veces"],r:"A",e:"Siempre."},
+{p:"¿Tiene eje?",o:["Infinitos","Uno","Ninguno"],r:"A",e:"Simetría total."}
+]
 };
 
 let canvas=document.getElementById("ruleta");
